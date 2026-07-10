@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-left glass">
+        <span class="badge"><i class="fas fa-robot"></i> Supervised Machine Learning</span>
+        <h1>Predict Student <span class="gradient">Marks</span> with AI</h1>
+        <p class="lead">
+            An AI/ML system that predicts a student's marks based on study hours using
+            <strong>Linear Regression</strong>. It demonstrates data collection, model training,
+            testing, and real-time prediction.
+        </p>
+        <div class="tech-row">
+            <span><i class="fab fa-python"></i> Python</span>
+            <span><i class="fas fa-table"></i> Pandas</span>
+            <span><i class="fas fa-cogs"></i> Scikit-learn</span>
+            <span><i class="fas fa-chart-line"></i> Linear Regression</span>
+        </div>
+    </div>
+
+    <div class="hero-right glass predict-panel">
+        <h2><i class="fas fa-magic"></i> Predict Marks</h2>
+        <p>Enter study hours to get your expected marks.</p>
+        <form action="{{ url_for('predict') }}" method="POST" id="predictForm">
+            <label for="study_hours">Study Hours (per day)</label>
+            <input type="number" id="study_hours" name="study_hours" step="0.1" min="0.1" max="24" placeholder="e.g. 5.5" required>
+            <small>Positive number between 0 and 24</small>
+            <button type="submit" class="btn" id="predictBtn">
+                <span class="btn-text"><i class="fas fa-bolt"></i> Predict Marks</span>
+                <span class="btn-loader hidden"><i class="fas fa-spinner fa-spin"></i> Predicting...</span>
+            </button>
+        </form>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">Key Features</h2>
+    <div class="cards-grid">
+        <article class="card glass"><i class="fas fa-keyboard"></i><h3>Input Study Hours</h3><p>Takes daily study hours as input for prediction.</p></article>
+        <article class="card glass"><i class="fas fa-star"></i><h3>Predict Expected Marks</h3><p>Estimates marks using a trained Linear Regression model.</p></article>
+        <article class="card glass"><i class="fas fa-seedling"></i><h3>Beginner Friendly</h3><p>Simple supervised learning project for students.</p></article>
+        <article class="card glass"><i class="fas fa-project-diagram"></i><h3>Full ML Workflow</h3><p>Dataset → Training → Testing → Prediction.</p></article>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">ML Workflow</h2>
+    <div class="workflow">
+        <div class="step glass"><span>1</span><h4>Data Collection</h4><p>Load dataset with Pandas</p></div>
+        <div class="step glass"><span>2</span><h4>Model Training</h4><p>Train Linear Regression</p></div>
+        <div class="step glass"><span>3</span><h4>Model Testing</h4><p>Evaluate with metrics</p></div>
+        <div class="step glass"><span>4</span><h4>Prediction</h4><p>Predict marks for new hours</p></div>
+    </div>
+</section>
+
+<section class="section two-col">
+    <div class="glass panel">
+        <h2 class="section-title left">Model Performance</h2>
+        <div class="metrics-grid">
+            <div class="metric glass-inner"><span>MAE</span><strong>{{ test_metrics.mae|default('—') }}</strong></div>
+            <div class="metric glass-inner"><span>RMSE</span><strong>{{ test_metrics.rmse|default('—') }}</strong></div>
+            <div class="metric glass-inner"><span>R² Score</span><strong>{{ test_metrics.r2_score|default('—') }}</strong></div>
+            <div class="metric glass-inner"><span>Test Accuracy</span><strong>{{ test_metrics.accuracy|default('—') }}%</strong></div>
+        </div>
+        <p class="formula-box">
+            Model Equation: <code>Marks = {{ metrics.intercept|default('—') }} + ({{ metrics.coefficient|default('—') }} × Hours)</code>
+        </p>
+    </div>
+
+    <div class="glass panel">
+        <h2 class="section-title left">About the Model</h2>
+        <ul class="outcomes">
+            <li><i class="fas fa-check-circle"></i> Algorithm: Linear Regression (Supervised ML)</li>
+            <li><i class="fas fa-check-circle"></i> Input: Daily study hours (0 – 24)</li>
+            <li><i class="fas fa-check-circle"></i> Output: Predicted marks out of 100</li>
+            <li><i class="fas fa-check-circle"></i> Trained &amp; evaluated with Scikit-learn</li>
+        </ul>
+        <p class="level-tag"><i class="fas fa-microchip"></i> Powered by Python · Pandas · Scikit-learn</p>
+    </div>
+</section>
+
+<section class="section glass panel">
+    <h2 class="section-title left">Dataset Preview <span class="muted">({{ total_samples }} samples)</span></h2>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>#</th><th>Study Hours</th><th>Marks</th></tr></thead>
+            <tbody>
+                {% for row in dataset_preview %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ row.Study_Hours }}</td>
+                    <td>{{ row.Marks }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

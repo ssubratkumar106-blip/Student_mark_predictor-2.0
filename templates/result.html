@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Result{% endblock %}
+
+{% block content %}
+<section class="result-header glass">
+    <span class="badge success"><i class="fas fa-check-circle"></i> Prediction Complete</span>
+    <h1>Your Predicted Result</h1>
+    <p>Textual and visual output from the trained Linear Regression model.</p>
+</section>
+
+<section class="result-layout">
+    <div class="result-text glass">
+        <h2><i class="fas fa-file-alt"></i> Text Prediction</h2>
+
+        <div class="result-stats">
+            <div class="stat">
+                <p>Study Hours</p>
+                <h3>{{ study_hours }}</h3>
+            </div>
+            <div class="stat highlight">
+                <p>Predicted Marks</p>
+                <h3 class="counter" data-target="{{ predicted_marks }}">0</h3>
+            </div>
+        </div>
+
+        <div class="progress-wrap">
+            <div class="progress-head">
+                <span>Performance Level</span>
+                <span>{{ predicted_marks }} / 100</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width: {{ predicted_marks }}%"></div></div>
+        </div>
+
+        <div class="result-info">
+            <p><strong>Model:</strong> Linear Regression (Scikit-learn)</p>
+            <p><strong>Test Accuracy:</strong> {{ test_accuracy }}%</p>
+            <p class="formula-box">
+                <code>Marks = {{ chart_data.intercept }} + ({{ chart_data.coefficient }} × Hours)</code>
+            </p>
+        </div>
+
+        <a href="{{ url_for('index') }}" class="btn"><i class="fas fa-arrow-left"></i> Predict Again</a>
+    </div>
+
+    <div class="result-visual glass">
+        <h2><i class="fas fa-chart-scatter"></i> Visual Prediction</h2>
+        <p class="chart-legend">
+            <span><i class="dot train"></i> Training Data</span>
+            <span><i class="dot line"></i> Regression Line</span>
+            <span><i class="dot pred"></i> Your Prediction</span>
+        </p>
+        <canvas id="predictionChart"></canvas>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const chartData = {{ chart_data | tojson }};
+    renderPredictionChart(chartData);
+</script>
+{% endblock %}

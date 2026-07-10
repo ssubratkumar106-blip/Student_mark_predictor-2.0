@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Student Mark Predictor{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="hud-bg"></div>
+    <div class="hud-grid"></div>
+    <div class="hud-frame">
+        <div class="hud-corner tl"></div>
+        <div class="hud-corner tr"></div>
+        <div class="hud-corner bl"></div>
+        <div class="hud-corner br"></div>
+    </div>
+
+    <header class="hud-header">
+        <div class="hud-title-wrap">
+            <span class="hud-line left"></span>
+            <h1 class="hud-title">STUDENT MARK PREDICTOR</h1>
+            <span class="hud-line right"></span>
+        </div>
+        <p class="hud-sub">Machine Learning · Linear Regression · Real-Time Prediction</p>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="toast-wrap">
+                {% for category, message in messages %}
+                    <div class="toast toast-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>Student Marks Prediction Using Machine Learning · Python · Pandas · Scikit-learn</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
